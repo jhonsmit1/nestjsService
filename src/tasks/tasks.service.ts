@@ -1,6 +1,7 @@
 
-import { Injectable } from "@nestjs/common";
-import { User,tasksInterface } from "./types";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { User, tasksInterface, taskInterfacebyId } from "./types";
+import { CreateTaskDTO, UpdateTaskDTO } from "./dto/tasks.dto";
 
 
 @Injectable()  //funciones que se pueden reutilziar en otra parte del codigo , metodos 
@@ -15,31 +16,32 @@ export class TasksService {
     //         age:25
     //     }
     // }
-    getTask(query:any): tasksInterface[] {
-        console.log("🚀 ~ TasksService ~ getTask ~ query:", query)
-        return this.tasks   
+    getTask(query: any): tasksInterface[] {
+        return this.tasks
     }
 
     //una unica tarea
-    getTaksid(id:number):tasksInterface[] {
-        return this.tasks.find(taks => taks.id === id)
+    getTaksid(id: number): taskInterfacebyId[] | any {
+        const result = this.tasks.find(task => task.id === id)
+        if (!result) return new NotFoundException('Tarea no encontrada')
+        return result
     }
 
     testing() {
         return 'test!!!'
     }
 
-    createTask(task:any) {
+    createTask(task: CreateTaskDTO) {
         this.tasks.push({
             ...task,
-            id:this.tasks.length+1,
+            id: this.tasks.length + 1,
         });
         // console.log(this.tasks);
-        
-        return {task}
+
+        return { task }
     }
 
-    updateTask() {
+    updateTask(task:UpdateTaskDTO) {
         return 'Actualizando tareas';
     }
 

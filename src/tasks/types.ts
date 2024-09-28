@@ -8,3 +8,7 @@ export interface tasksInterface {
     title:string;
     status:boolean;
 }
+
+export interface taskInterfacebyId extends tasksInterface {
+    id:number
+}
